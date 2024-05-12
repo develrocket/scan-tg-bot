@@ -2,11 +2,11 @@ const { Web3 } = require('web3');
 const axios = require('axios');
 const TelegramBot = require('node-telegram-bot-api');
 
-const infuraApiKey = '599810494fcd40fc9dbcf6db457a77c0';
+const infuraApiKey = 'INFURA_API_KEY';
 const web3 = new Web3(`https://mainnet.infura.io/v3/${infuraApiKey}`);
 
 // replace the value below with the Telegram token you receive from @BotFather
-const token = '7173236355:AAGOaGGZEDKXccTFZrfp3NNn2zUOii1RUzQ';
+const token = 'TG_BOT_TOKEN';
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, {polling: true});
