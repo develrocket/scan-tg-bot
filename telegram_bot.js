@@ -2,21 +2,16 @@ const { Web3 } = require('web3');
 const axios = require('axios');
 const TelegramBot = require('node-telegram-bot-api');
 
-const infuraApiKey = 'INFURA_API_KEY';
+const infuraApiKey = 'infuraApiKey';
 const web3 = new Web3(`https://mainnet.infura.io/v3/${infuraApiKey}`);
 
 // replace the value below with the Telegram token you receive from @BotFather
-const token = 'TG_BOT_TOKEN';
+const token = 'botToken';
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, {polling: true});
 
-const ethereum = 'ethereum';
-const sol = 'solana';
-const ton = 'ton';
-const bnc = 'bsc';
-
-var chainId = 'ethereum';
+let chainId = 'ethereum';
 
 bot.onText(/\/start/, (msg, match) => {
     const chatId = msg.chat.id;
@@ -29,7 +24,7 @@ bot.on('message', async (msg) => {
 
     if(msg.text =="/start" || msg.text =="ethereum" || msg.text =="solana" || msg.text =="bsc" || msg.text =="ton")
     {
-        if(msg.text !="/start"){
+        if(msg.text != "/start"){
             chainId = msg.text;
             bot.sendMessage(chatId, "Input smart contract code.");
         }
@@ -41,8 +36,7 @@ bot.on('message', async (msg) => {
   if(await isContractCode(msg.text)){
     tokenInfo = await getPairInfo(chainId, msg.text);
     var age = new Date() - Date(tokenInfo.pairCreatedAt);
-    message = `<b>Forwarded from Fabio</b>
-    <b>ANALYSED BY</b> @contract_scan_dev_bot
+    message = `<b>ANALYSED BY</b> @contract_scan_dev_bot
     
     📊 <a href = "${tokenInfo.url}">${tokenInfo.baseToken.name} (${tokenInfo.baseToken.symbol})</a>
     CA: ${tokenInfo.baseToken.address}
@@ -92,8 +86,11 @@ async function isContractCode(contractAddress) {
     try {
         if(chainId =="ethereum"){
             code = await web3.eth.getCode(contractAddress);
+            return code.length > 5;
         }
-        return true;
+        else{
+          return contractAddress.length >20;
+        }
     } catch (error) {
         console.error('Error fetching contract code:', error.message);
         return false;
